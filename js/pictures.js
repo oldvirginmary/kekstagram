@@ -95,15 +95,14 @@ let renderOverlay = () => {
 
     overlay.addEventListener("click", (evt) => {
         if (!evt.path.includes(overlayPreview)) window.closeOverlay();
-        console.log(!evt.path.includes(overlayPreview));
     });
     
     overlayCloseElement.addEventListener("click", () => {
         window.closeOverlay();
     });
 
-    window.addEventListener("keydown", (e) => {
-        if (e.code === "Escape") {
+    window.addEventListener("keydown", (evt) => {
+        if (evt.code === "Escape") {
             window.closeOverlay();
         }
     });

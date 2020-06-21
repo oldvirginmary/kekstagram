@@ -553,7 +553,7 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
 
 .container {
   box-sizing: border-box;
-  width: 100%;
+  width: 980px;
   margin: 0 auto;
 }
 
@@ -690,7 +690,7 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
 
 @media (min-width: 1380px) {
   .container {
-    /* width: 1380px; */
+    width: 1380px;
   }
 
   .picture:nth-of-type(2n-1):nth-of-type(-n+6) {
@@ -713,12 +713,6 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
   }
   .picture:nth-child(5) {
     margin-right: 600px;
-  }
-
-  .picture:nth-child(2),
-  .picture:nth-child(4),
-  .picture:nth-child(6) {
-    /*margin-left: 11px;*/
   }
 
   .picture:nth-child(2),
