@@ -95,7 +95,6 @@ let renderOverlay = () => {
 
     overlay.addEventListener("click", (evt) => {
         if (!evt.path.includes(overlayPreview)) window.closeOverlay();
-        // console.log(evt.target.path);
         console.log(!evt.path.includes(overlayPreview));
     });
     
