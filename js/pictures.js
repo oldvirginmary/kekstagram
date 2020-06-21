@@ -1,13 +1,12 @@
 "use strict";
 
-let renderOverlay = () => {
+let setGalleryOverlay = () => {
     let body = document.querySelector("body");
     let overlay = document.querySelector(".gallery-overlay");
-    let overlayPreview = document.querySelector(".gallery-overlay-preview");
-    let overlayCloseElement = document.querySelector(".gallery-overlay-close");
+    let overlayPreview = document.querySelector(".overlay-preview");
     let commentsList = document.querySelector(".gallery-overlay-comments-list");
 
-    window.openOverlay = (pictureData) => {
+    window.openGalleryOverlay = (pictureData) => {
         let renderComments = (comments) => {
             let currentCommentsCount = document.querySelector(".comments-count-current");
             let commentsCount = document.querySelector(".comments-count");
@@ -79,7 +78,7 @@ let renderOverlay = () => {
         body.classList.add("modal-open");
     }
 
-    window.closeOverlay = () => {
+    window.closeGalleryOverlay = () => {
         let loadMoreBtn = document.querySelector(".gallery-overlay-loadmore");
 
         if (loadMoreBtn) loadMoreBtn.remove();
@@ -94,16 +93,14 @@ let renderOverlay = () => {
     }
 
     overlay.addEventListener("click", (evt) => {
-        if (!evt.path.includes(overlayPreview)) window.closeOverlay();
+        if (!evt.path.includes(overlayPreview) && !overlay.classList.contains("hidden")) {
+            window.closeGalleryOverlay();
+        }
     });
     
-    overlayCloseElement.addEventListener("click", () => {
-        window.closeOverlay();
-    });
-
     window.addEventListener("keydown", (evt) => {
-        if (evt.code === "Escape") {
-            window.closeOverlay();
+        if (evt.code === "Escape" && !overlay.classList.contains("hidden")) {
+            window.closeGalleryOverlay();
         }
     });
 }
@@ -193,14 +190,14 @@ let renderPictures = (pictures) => {
         pictureComments.textContent = pictureData.comments.length;
 
         picture.addEventListener("click", () => {
-            window.openOverlay(pictureData);
+            window.openGalleryOverlay(pictureData);
         });
 
         picturesBlock.appendChild(picture);
     }
 }
 
-renderOverlay();
+setGalleryOverlay();
 renderPictures(getPictures());
 
 
