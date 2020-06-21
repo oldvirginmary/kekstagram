@@ -3,7 +3,7 @@
 let setGalleryOverlay = () => {
     let body = document.querySelector("body");
     let overlay = document.querySelector(".gallery-overlay");
-    let overlayPreview = document.querySelector(".overlay-preview");
+    let overlayPreview = document.querySelector(".gallery-overlay-preview");
     let commentsList = document.querySelector(".gallery-overlay-comments-list");
 
     window.openGalleryOverlay = (pictureData) => {
