@@ -3,7 +3,7 @@
 let setGalleryOverlay = () => {
     let body = document.querySelector("body");
     let overlay = document.querySelector(".gallery-overlay");
-    let overlayPreview = document.querySelector(".gallery-overlay-preview");
+    let overlayContainer = document.querySelector(".gallery-overlay-container");
     let commentsList = document.querySelector(".gallery-overlay-comments-list");
 
     window.openGalleryOverlay = (pictureData) => {
@@ -74,8 +74,8 @@ let setGalleryOverlay = () => {
 
         renderComments(pictureData.comments.slice());
 
-        overlay.classList.remove("hidden");
         body.classList.add("modal-open");
+        overlay.classList.remove("hidden");
     }
 
     window.closeGalleryOverlay = () => {
@@ -93,7 +93,7 @@ let setGalleryOverlay = () => {
     }
 
     overlay.addEventListener("click", (evt) => {
-        if (!evt.path.includes(overlayPreview) && !overlay.classList.contains("hidden")) {
+        if (!evt.path.includes(overlayContainer) && !overlay.classList.contains("hidden")) {
             window.closeGalleryOverlay();
         }
     });
@@ -101,6 +101,54 @@ let setGalleryOverlay = () => {
     window.addEventListener("keydown", (evt) => {
         if (evt.code === "Escape" && !overlay.classList.contains("hidden")) {
             window.closeGalleryOverlay();
+        }
+    });
+}
+
+let setUploadOverlay = () => {
+    let body = document.querySelector("body");
+    let overlay = document.querySelector(".upload-overlay");
+    let overlayContainer = document.querySelector(".upload-effect-container");
+    let uploadCancelBtn = document.querySelector(".upload-form-cancel");
+
+    let uploadForm = document.querySelector("#upload-select-image");
+    let pictureField = document.querySelector("#upload-file");
+
+    window.openUploadOverlay = () => {
+        let reader = new FileReader();
+        let previewImage = document.querySelector(".effect-image-preview");
+
+        reader.addEventListener("load", () => {
+            previewImage.setAttribute("src", reader.result);
+        });
+
+        reader.readAsDataURL(pictureField.files[0]);
+
+        body.classList.add("modal-open");
+        overlay.classList.remove("hidden");
+    }
+
+    window.closeUploadOverlay = () => {
+        overlay.classList.add("hidden");
+        body.classList.remove("modal-open");
+        uploadForm.reset();
+    }
+
+    overlay.addEventListener("click", (evt) => {
+        if (evt.target === uploadCancelBtn) {
+            window.closeUploadOverlay();
+        }
+    });
+
+    overlay.addEventListener("click", (evt) => {
+        if (!evt.path.includes(overlayContainer) && !overlay.classList.contains("hidden")) {
+            window.closeUploadOverlay();
+        }
+    });
+
+    window.addEventListener("keydown", (evt) => {
+        if (evt.code === "Escape" && !overlay.classList.contains("hidden")) {
+            window.closeUploadOverlay();
         }
     });
 }
@@ -197,7 +245,18 @@ let renderPictures = (pictures) => {
     }
 }
 
-setGalleryOverlay();
-renderPictures(getPictures());
+let renderUploadForm = () => {
+    let pictureField = document.querySelector("#upload-file");
+    
+    pictureField.addEventListener("change", () => {
+        window.openUploadOverlay();
+    });
+}
 
+
+setGalleryOverlay();
+setUploadOverlay();
+
+renderPictures(getPictures());
+renderUploadForm();
 

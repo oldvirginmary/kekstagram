@@ -131,8 +131,9 @@ body.modal-open {
   text-align: center;
 }
 
-.upload-effect__container {
+.upload-effect-container {
   position: relative;
+  width: 640px;
 }
 
 .upload-effect-preview {
@@ -346,6 +347,7 @@ body.modal-open {
 }
 
 .effect-image-preview {
+  width: 100%;
   vertical-align: middle;
 }
 
@@ -767,7 +769,7 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
   cursor: pointer;
 }
 
-.gallery-overlay-preview {
+.gallery-overlay-container {
   display: inline-block;
   width: 640px;
   margin: 30px 0;
