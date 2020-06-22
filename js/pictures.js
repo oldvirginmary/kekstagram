@@ -1,28 +1,26 @@
-"use strict";
+var setGalleryOverlay = function () {
+    var body = document.querySelector("body");
+    var overlay = document.querySelector(".gallery-overlay");
+    var overlayContainer = document.querySelector(".gallery-overlay-container");
+    var commentsList = document.querySelector(".gallery-overlay-comments-list");
 
-let setGalleryOverlay = () => {
-    let body = document.querySelector("body");
-    let overlay = document.querySelector(".gallery-overlay");
-    let overlayContainer = document.querySelector(".gallery-overlay-container");
-    let commentsList = document.querySelector(".gallery-overlay-comments-list");
-
-    window.openGalleryOverlay = (pictureData) => {
-        let renderComments = (comments) => {
-            let currentCommentsCount = document.querySelector(".comments-count-current");
-            let commentsCount = document.querySelector(".comments-count");
-            let commentTemplate = document.querySelector("#comment-template");
+    window.openGalleryOverlay = function (pictureData) {
+        var renderComments = function (comments) {
+            var currentCommentsCount = document.querySelector(".comments-count-current");
+            var commentsCount = document.querySelector(".comments-count");
+            var commentTemplate = document.querySelector("#comment-template");
 
             currentCommentsCount.textContent = 0;
             commentsCount.textContent = pictureData.comments.length;
 
-            let render = (comments) => {
-                for (let i = 0; i < comments.length; i++) {
-                    let comment = commentTemplate
+            var render = function (comments) {
+                for (var i = 0; i < comments.length; i++) {
+                    var comment = commentTemplate
                         .content
                         .cloneNode(true)
                         .querySelector(".gallery-overlay-comment");
-                    let commentText = comment.querySelector(".gallery-overlay-comment-text");
-                    let commentAvatar = comment.querySelector(".gallery-overlay-comment-avatar");
+                    var commentText = comment.querySelector(".gallery-overlay-comment-text");
+                    var commentAvatar = comment.querySelector(".gallery-overlay-comment-avatar");
 
                     commentText.textContent = comments[i];
                     commentAvatar.setAttribute(
@@ -39,21 +37,21 @@ let setGalleryOverlay = () => {
                     Number(currentCommentsCount.textContent) + comments.length;
             }
 
-            let renderNext = (toLoad) => {
+            var renderNext = function (toLoad) {
                 if (comments.length < toLoad) toLoad = comments.length;
                 render(comments.splice(0, toLoad));
             }
 
-            let addLoadMoreBtn = () => {
+            var addLoadMoreBtn = function () {
                 if (comments.length > 5) {
-                    let btn = document.createElement("button");
+                    var btn = document.createElement("button");
                     btn.classList.add("gallery-overlay-loadmore");
                     btn.setAttribute("type", "button");
                     btn.textContent = "Загрузить ещё";
 
                     commentsList.after(btn);
 
-                    btn.addEventListener("click", () => {
+                    btn.addEventListener("click", function () {
                         renderNext(5);
                         if (comments.length === 0) document.querySelector(".gallery-overlay-loadmore").remove();
                     });
@@ -64,9 +62,9 @@ let setGalleryOverlay = () => {
             renderNext(5);
         }
 
-        let picture = document.querySelector(".gallery-overlay-image");
-        let description = document.querySelector(".gallery-overlay-description-text");
-        let likes = document.querySelector(".likes-count");
+        var picture = document.querySelector(".gallery-overlay-image");
+        var description = document.querySelector(".gallery-overlay-description-text");
+        var likes = document.querySelector(".likes-count");
 
         picture.setAttribute("src", pictureData.url);
         description.textContent = pictureData.description;
@@ -78,8 +76,8 @@ let setGalleryOverlay = () => {
         overlay.classList.remove("hidden");
     }
 
-    window.closeGalleryOverlay = () => {
-        let loadMoreBtn = document.querySelector(".gallery-overlay-loadmore");
+    window.closeGalleryOverlay = function () {
+        var loadMoreBtn = document.querySelector(".gallery-overlay-loadmore");
 
         if (loadMoreBtn) loadMoreBtn.remove();
 
@@ -92,33 +90,33 @@ let setGalleryOverlay = () => {
         commentsList.classList.remove("loaded");
     }
 
-    overlay.addEventListener("click", (evt) => {
+    overlay.addEventListener("click", function (evt) {
         if (!evt.path.includes(overlayContainer) && !overlay.classList.contains("hidden")) {
             window.closeGalleryOverlay();
         }
     });
     
-    window.addEventListener("keydown", (evt) => {
+    window.addEventListener("keydown", function (evt) {
         if (evt.code === "Escape" && !overlay.classList.contains("hidden")) {
             window.closeGalleryOverlay();
         }
     });
 }
 
-let setUploadOverlay = () => {
-    let body = document.querySelector("body");
-    let overlay = document.querySelector(".upload-overlay");
-    let overlayContainer = document.querySelector(".upload-effect-container");
-    let uploadCancelBtn = document.querySelector(".upload-form-cancel");
+var setUploadOverlay = function () {
+    var body = document.querySelector("body");
+    var overlay = document.querySelector(".upload-overlay");
+    var overlayContainer = document.querySelector(".upload-effect-container");
+    var uploadCancelBtn = document.querySelector(".upload-form-cancel");
 
-    let uploadForm = document.querySelector("#upload-select-image");
-    let pictureField = document.querySelector("#upload-file");
+    var uploadForm = document.querySelector("#upload-select-image");
+    var pictureField = document.querySelector("#upload-file");
 
-    window.openUploadOverlay = () => {
-        let reader = new FileReader();
-        let previewImage = document.querySelector(".effect-image-preview");
+    window.openUploadOverlay = function () {
+        var reader = new FileReader();
+        var previewImage = document.querySelector(".effect-image-preview");
 
-        reader.addEventListener("load", () => {
+        reader.addEventListener("load", function () {
             previewImage.setAttribute("src", reader.result);
         });
 
@@ -128,47 +126,47 @@ let setUploadOverlay = () => {
         overlay.classList.remove("hidden");
     }
 
-    window.closeUploadOverlay = () => {
+    window.closeUploadOverlay = function () {
         overlay.classList.add("hidden");
         body.classList.remove("modal-open");
         uploadForm.reset();
     }
 
-    overlay.addEventListener("click", (evt) => {
+    overlay.addEventListener("click", function (evt) {
         if (evt.target === uploadCancelBtn) {
             window.closeUploadOverlay();
         }
     });
 
-    overlay.addEventListener("click", (evt) => {
+    overlay.addEventListener("click", function (evt) {
         if (!evt.path.includes(overlayContainer) && !overlay.classList.contains("hidden")) {
             window.closeUploadOverlay();
         }
     });
 
-    window.addEventListener("keydown", (evt) => {
+    window.addEventListener("keydown", function (evt) {
         if (evt.code === "Escape" && !overlay.classList.contains("hidden")) {
             window.closeUploadOverlay();
         }
     });
 }
 
-let getPictures = () => {
-    let picturesPosts = [];
-    let picturesNames = [];
-    for (let i = 1; i <= 25; i++) picturesNames.push(i);
+var getPictures = function () {
+    var picturesPosts = [];
+    var picturesNames = [];
+    for (var i = 1; i <= 25; i++) picturesNames.push(i);
 
-    let getUrl = () => {
-        let picsDirectory = "photos/";
+    var getUrl = function () {
+        var picsDirectory = "photos/";
         return picsDirectory + picturesNames.shift().toString() + ".jpg";
     }
 
-    let getLikes = () => {
+    var getLikes = function () {
         return Math.floor(Math.random() * 185 + 15); // from 15 to 200
     }
 
-    let getComments = () => {
-        let variants = [
+    var getComments = function () {
+        var variants = [
             "Всё отлично!",
             "В целом всё неплохо. Но не всё.",
             "Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.",
@@ -177,12 +175,12 @@ let getPictures = () => {
             "Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!",
         ];
 
-        let numOfComments = Math.floor(Math.random() * 7); // from 0 to 6
+        var numOfComments = Math.floor(Math.random() * 7); // from 0 to 6
 
-        let comments = [];
+        var comments = [];
 
-        for (let i = 0; i < numOfComments; i++) {
-            let variant = variants
+        for (var i = 0; i < numOfComments; i++) {
+            var variant = variants
                 .splice(Math.floor(Math.random() * variants.length), 1)[0];
             comments.push(variant);
         }
@@ -190,8 +188,8 @@ let getPictures = () => {
         return comments;
     }
 
-    let getDescription = () => {
-        let descriptions = [
+    var getDescription = function () {
+        var descriptions = [
             "Тестим новую камеру!",
             "Затусили с друзьями на море",
             "Как же круто тут кормят",
@@ -215,29 +213,29 @@ let getPictures = () => {
     return picturesPosts;
 }
 
-let renderPictures = (pictures) => {
-    let picturesBlock = document.querySelector(".pictures");
-    let pictureTemplate = document.querySelector("#picture-template");
+var renderPictures = function (pictures) {
+    var picturesBlock = document.querySelector(".pictures");
+    var pictureTemplate = document.querySelector("#picture-template");
 
     while (pictures.length > 0) {
-        let pictureData = pictures
+        var pictureData = pictures
             .splice([Math.floor(Math.random() * pictures.length)], 1)[0];
 
-        let picture = pictureTemplate
+        var picture = pictureTemplate
             .content
             .cloneNode(true)
             .querySelector(".picture");
 
-        let pictureLikes = picture.querySelector(".picture-likes");
-        let pictureComments = picture.querySelector(".picture-comments");
-        let pictureImg = picture.querySelector("img");
+        var pictureLikes = picture.querySelector(".picture-likes");
+        var pictureComments = picture.querySelector(".picture-comments");
+        var pictureImg = picture.querySelector("img");
 
         picture.setAttribute("href", "#");
         pictureImg.setAttribute("src", pictureData.url);
         pictureLikes.textContent = pictureData.likes;
         pictureComments.textContent = pictureData.comments.length;
 
-        picture.addEventListener("click", () => {
+        picture.addEventListener("click", function () {
             window.openGalleryOverlay(pictureData);
         });
 
@@ -245,10 +243,10 @@ let renderPictures = (pictures) => {
     }
 }
 
-let renderUploadForm = () => {
-    let pictureField = document.querySelector("#upload-file");
+var renderUploadForm = function () {
+    var pictureField = document.querySelector("#upload-file");
     
-    pictureField.addEventListener("change", () => {
+    pictureField.addEventListener("change", function () {
         window.openUploadOverlay();
     });
 }
