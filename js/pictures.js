@@ -110,17 +110,34 @@ var setUploadOverlay = function () {
     var uploadCancelBtn = document.querySelector(".upload-form-cancel");
 
     var uploadForm = document.querySelector("#upload-select-image");
-    var pictureField = document.querySelector("#upload-file");
+    var effectLevel = document.querySelector(".upload-effect-level");
 
     window.openUploadOverlay = function () {
-        var reader = new FileReader();
-        var previewImage = document.querySelector(".effect-image-preview");
+        var setPreview = function () {
+            var reader = new FileReader();
+            var pictureField = document.querySelector("#upload-file");
 
-        reader.addEventListener("load", function () {
-            previewImage.setAttribute("src", reader.result);
-        });
+            reader.addEventListener("load", function () {
+                var previewImage = document.querySelector(".effect-image-preview");
+                previewImage.setAttribute("src", reader.result);
+            });
+            reader.readAsDataURL(pictureField.files[0]);
+        }
 
-        reader.readAsDataURL(pictureField.files[0]);
+        var setEffects = function () {
+            var effectControls = document.querySelector(".upload-effect-controls");
+
+            effectControls.addEventListener("change", function (evt) {
+                if (evt.target.id === "upload-effect-none") {
+                    effectLevel.classList.add("hidden");
+                } else {
+                    effectLevel.classList.remove("hidden");
+                }
+            });
+        }
+
+        setPreview();
+        setEffects();
 
         body.classList.add("modal-open");
         overlay.classList.remove("hidden");
@@ -129,7 +146,9 @@ var setUploadOverlay = function () {
     window.closeUploadOverlay = function () {
         overlay.classList.add("hidden");
         body.classList.remove("modal-open");
+
         uploadForm.reset();
+        effectLevel.classList.add("hidden");
     }
 
     overlay.addEventListener("click", function (evt) {
@@ -239,13 +258,27 @@ var renderPictures = function (pictures) {
             window.openGalleryOverlay(pictureData);
         });
 
+        console.log(picture);
+
         picturesBlock.appendChild(picture);
     }
 }
 
 var renderUploadForm = function () {
     var pictureField = document.querySelector("#upload-file");
-    
+    var effectLevelLine = document.querySelector(".upload-effect-level-line");
+    var effectLevelPin = document.querySelector(".upload-effect-level-pin");
+    var effectLevelValue = document.querySelector(".upload-effect-level-val");
+
+    effectLevelLine.addEventListener("mouseup", (evt) => {
+        var effectLinePosX = Math.round(effectLevelLine.getBoundingClientRect().x);
+        var effectLineWidth = effectLevelLine.getBoundingClientRect().width;
+        var effectValue = (evt.clientX - effectLinePosX) / (effectLineWidth / 100);
+
+        effectLevelPin.style.left = effectValue.toString() + "%";
+        effectLevelValue.style.width = effectValue.toString() + "%";
+    });
+
     pictureField.addEventListener("change", function () {
         window.openUploadOverlay();
     });
