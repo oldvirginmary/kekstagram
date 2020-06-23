@@ -233,13 +233,11 @@ var getPictures = function () {
 }
 
 var renderPictures = function (pictures) {
+    var picturesToRender = pictures.slice();
     var picturesBlock = document.querySelector(".pictures");
     var pictureTemplate = document.querySelector("#picture-template");
 
-    while (pictures.length > 0) {
-        var pictureData = pictures
-            .splice([Math.floor(Math.random() * pictures.length)], 1)[0];
-
+    var pictureToElement = function (pictureData) {
         var picture = pictureTemplate
             .content
             .cloneNode(true)
@@ -258,9 +256,12 @@ var renderPictures = function (pictures) {
             window.openGalleryOverlay(pictureData);
         });
 
-        console.log(picture);
-
-        picturesBlock.appendChild(picture);
+        return picture;
+    }
+    
+    for (var i = 0; i < pictures.length; i++) {
+        picturesBlock.appendChild(pictureToElement(
+            picturesToRender.splice([Math.floor(Math.random() * picturesToRender.length)], 1)[0]));
     }
 }
 
