@@ -346,6 +346,11 @@ body.modal-open {
   border: 0;
 }
 
+.upload-form-preview {
+  overflow: hidden;
+  background-color: #000000;
+}
+
 .effect-image-preview {
   width: 100%;
   vertical-align: middle;

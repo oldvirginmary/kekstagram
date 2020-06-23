@@ -267,21 +267,41 @@ var renderPictures = function (pictures) {
 
 var renderUploadForm = function () {
     var pictureField = document.querySelector("#upload-file");
+    var scaleLevel = document.querySelector(".upload-resize-controls");
     var effectLevelLine = document.querySelector(".upload-effect-level-line");
-    var effectLevelPin = document.querySelector(".upload-effect-level-pin");
-    var effectLevelValue = document.querySelector(".upload-effect-level-val");
 
-    effectLevelLine.addEventListener("mouseup", function (evt) {
+    pictureField.addEventListener("change", function () {
+        window.openUploadOverlay();
+    });
+
+    scaleLevel.addEventListener("mouseup", function (evt) {
+        var previewImage = document.querySelector(".effect-image-preview");
+        var scaleLevelValue = scaleLevel.querySelector(".upload-resize-controls-value");
+        var scaleLevelUp = scaleLevel.querySelector(".upload-resize-controls-button-inc");
+        var scaleLevelDown = scaleLevel.querySelector(".upload-resize-controls-button-dec");
+
+        var scaleCurrentValue = Number(scaleLevelValue.value.slice(0, -1));
+        var scaleNewValue = scaleCurrentValue;
+        var step = 25; // percent
+
+        if (evt.target === scaleLevelUp) scaleNewValue += step;
+        if (evt.target === scaleLevelDown) scaleNewValue -= step;
+
+        scaleLevelValue.value = scaleNewValue.toString() + "%";
+
+        previewImage.style = "transform: scale(" + (scaleNewValue / 100).toString() + ");\"";
+    });
+
+    effectLevelLine.addEventListener("click", function (evt) {
+        var effectLevelPin = document.querySelector(".upload-effect-level-pin");
+        var effectLevelValue = document.querySelector(".upload-effect-level-val");
+
         var effectLinePosX = Math.round(effectLevelLine.getBoundingClientRect().x);
         var effectLineWidth = effectLevelLine.getBoundingClientRect().width;
         var effectValue = (evt.clientX - effectLinePosX) / (effectLineWidth / 100);
 
         effectLevelPin.style.left = effectValue.toString() + "%";
         effectLevelValue.style.width = effectValue.toString() + "%";
-    });
-
-    pictureField.addEventListener("change", function () {
-        window.openUploadOverlay();
     });
 }
 
