@@ -271,7 +271,7 @@ var renderUploadForm = function () {
     var effectLevelPin = document.querySelector(".upload-effect-level-pin");
     var effectLevelValue = document.querySelector(".upload-effect-level-val");
 
-    effectLevelLine.addEventListener("mouseup", (evt) => {
+    effectLevelLine.addEventListener("mouseup", function (evt) {
         var effectLinePosX = Math.round(effectLevelLine.getBoundingClientRect().x);
         var effectLineWidth = effectLevelLine.getBoundingClientRect().width;
         var effectValue = (evt.clientX - effectLinePosX) / (effectLineWidth / 100);
