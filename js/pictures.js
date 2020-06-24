@@ -110,7 +110,6 @@ var setUploadOverlay = function () {
     var uploadCancelBtn = document.querySelector(".upload-form-cancel");
 
     var uploadForm = document.querySelector("#upload-select-image");
-    var effectLevel = document.querySelector(".upload-effect-level");
 
     window.openUploadOverlay = function () {
         var setPreview = function () {
@@ -124,31 +123,23 @@ var setUploadOverlay = function () {
             reader.readAsDataURL(pictureField.files[0]);
         }
 
-        var setEffects = function () {
-            var effectControls = document.querySelector(".upload-effect-controls");
-
-            effectControls.addEventListener("change", function (evt) {
-                if (evt.target.id === "upload-effect-none") {
-                    effectLevel.classList.add("hidden");
-                } else {
-                    effectLevel.classList.remove("hidden");
-                }
-            });
-        }
-
         setPreview();
-        setEffects();
 
         body.classList.add("modal-open");
         overlay.classList.remove("hidden");
     }
 
     window.closeUploadOverlay = function () {
+        var filterLevelPin = document.querySelector(".upload-effect-level-pin");
+        var filterLevelValue = document.querySelector(".upload-effect-level-val");
+
         overlay.classList.add("hidden");
         body.classList.remove("modal-open");
 
         uploadForm.reset();
-        effectLevel.classList.add("hidden");
+
+        filterLevelPin.style.left = "50%";
+        filterLevelValue.style.width = "50%";
     }
 
     overlay.addEventListener("click", function (evt) {
@@ -267,42 +258,70 @@ var renderPictures = function (pictures) {
 
 var renderUploadForm = function () {
     var pictureField = document.querySelector("#upload-file");
+    var previewImage = document.querySelector(".effect-image-preview");
     var scaleLevel = document.querySelector(".upload-resize-controls");
-    var effectLevelLine = document.querySelector(".upload-effect-level-line");
+    var filterControls = document.querySelector(".upload-effect-controls");
+    var filterLevel = document.querySelector(".upload-effect-level");
+    var filterLevelLine = document.querySelector(".upload-effect-level-line");
 
     pictureField.addEventListener("change", function () {
         window.openUploadOverlay();
     });
 
-    scaleLevel.addEventListener("mouseup", function (evt) {
-        var previewImage = document.querySelector(".effect-image-preview");
-        var scaleLevelValue = scaleLevel.querySelector(".upload-resize-controls-value");
-        var scaleLevelUp = scaleLevel.querySelector(".upload-resize-controls-button-inc");
-        var scaleLevelDown = scaleLevel.querySelector(".upload-resize-controls-button-dec");
+    var setScaleControll = function () {
+        scaleLevel.addEventListener("mouseenter", scaleLevelShow);
+        scaleLevel.addEventListener("mouseleave", scaleLevelHide);
 
-        var scaleCurrentValue = Number(scaleLevelValue.value.slice(0, -1));
-        var scaleNewValue = scaleCurrentValue;
-        var step = 25; // percent
+        scaleLevel.addEventListener("mouseup", function (evt) {
+            var scaleLevelValue = scaleLevel.querySelector(".upload-resize-controls-value");
+            var scaleLevelUp = scaleLevel.querySelector(".upload-resize-controls-button-inc");
+            var scaleLevelDown = scaleLevel.querySelector(".upload-resize-controls-button-dec");
 
-        if (evt.target === scaleLevelUp) scaleNewValue += step;
-        if (evt.target === scaleLevelDown) scaleNewValue -= step;
+            var scaleCurrentValue = Number(scaleLevelValue.value.slice(0, -1));
+            var scaleNewValue = scaleCurrentValue;
+            var step = 25; // percent
 
-        scaleLevelValue.value = scaleNewValue.toString() + "%";
+            if (evt.target === scaleLevelUp) scaleNewValue += step;
+            if (evt.target === scaleLevelDown) scaleNewValue -= step;
 
-        previewImage.style = "transform: scale(" + (scaleNewValue / 100).toString() + ");\"";
-    });
+            scaleLevelValue.value = scaleNewValue.toString() + "%";
 
-    effectLevelLine.addEventListener("click", function (evt) {
-        var effectLevelPin = document.querySelector(".upload-effect-level-pin");
-        var effectLevelValue = document.querySelector(".upload-effect-level-val");
+            previewImage.style = "transform: scale(" + (scaleNewValue / 100).toString() + ");\"";
+        });
+    }
 
-        var effectLinePosX = Math.round(effectLevelLine.getBoundingClientRect().x);
-        var effectLineWidth = effectLevelLine.getBoundingClientRect().width;
-        var effectValue = (evt.clientX - effectLinePosX) / (effectLineWidth / 100);
+    var setFilterControll = function () {
+        filterLevel.addEventListener("mouseenter", filterLevelShow);
+        filterLevel.addEventListener("mouseleave", filterLevelHide);
 
-        effectLevelPin.style.left = effectValue.toString() + "%";
-        effectLevelValue.style.width = effectValue.toString() + "%";
-    });
+        filterLevelLine.addEventListener("click", function (evt) {
+            var filterLevelPin = document.querySelector(".upload-effect-level-pin");
+            var filterLevelValue = document.querySelector(".upload-effect-level-val");
+
+            var filterLinePosX = Math.round(filterLevelLine.getBoundingClientRect().x);
+            var filterLineWidth = filterLevelLine.getBoundingClientRect().width;
+            var filterValue = (evt.clientX - filterLinePosX) / (filterLineWidth / 100);
+
+            filterLevelPin.style.left = filterValue.toString() + "%";
+            filterLevelValue.style.width = filterValue.toString() + "%";
+        });
+    }
+
+    var setFilterSwitch = function () {
+        filterControls.addEventListener("change", function (evt) {
+            var noEffect = document.querySelector("#upload-effect-none");
+
+            if (evt.target === noEffect) {
+                filterLevelHide();
+            } else {
+                filterLevelShow();
+            }
+        });
+    }
+
+    setScaleControll();
+    setFilterControll();
+    setFilterSwitch();
 }
 
 
