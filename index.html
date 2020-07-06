@@ -34,82 +34,6 @@
       <span class="upload-control-camera"></span>
     </label>
   </div>
-
-  <div class="upload-overlay hidden">
-    <div class="upload-effect">
-      <div class="upload-effect-container">
-        <fieldset class="upload-resize-controls">
-          <button type="button"
-            class="upload-resize-control upload-resize-controls-button upload-resize-controls-button-dec">–
-          </button>
-          <input type="text" 
-            class="upload-resize-control upload-resize-controls-value" 
-            value="100%" readonly title="Image Scale" name="scale"/>
-          <button type="button"
-            class="upload-resize-control upload-resize-controls-button upload-resize-controls-button-inc">+
-          </button>
-        </fieldset>
-
-        <div class="upload-form-preview">
-          <div></div>
-          <img src="img/upload-default-image.jpg" class="effect-image-preview">
-        </div>
-
-        <fieldset class="upload-effect-controls">
-          <div class="upload-effect-level transition-hide">
-            <div class="upload-effect-level-line">
-              <div class="upload-effect-level-pin"></div>
-              <div class="upload-effect-level-val"></div>
-            </div>
-          </div>
-
-          <input type="radio" name="effect" id="upload-effect-none" value="none" checked>
-          <label class="upload-effect-label" for="upload-effect-none">
-            <div class="upload-effect-preview"></div>
-            Оригинал
-          </label>
-
-          <input type="radio" name="effect" id="upload-effect-chrome" value="chrome">
-          <label class="upload-effect-label upload-effect-label-chrome" for="upload-effect-chrome">
-            <div class="upload-effect-preview"></div>
-            Хром
-          </label>
-
-          <input type="radio" name="effect" id="upload-effect-sepia" value="sepia">
-          <label class="upload-effect-label upload-effect-label-sepia" for="upload-effect-sepia">
-            <div class="upload-effect-preview"></div>
-            Сепия
-          </label>
-
-          <input type="radio" name="effect" id="upload-effect-marvin" value="marvin">
-          <label class="upload-effect-label upload-effect-label-marvin" for="upload-effect-marvin">
-            <div class="upload-effect-preview"></div>
-            Марвин
-          </label>
-
-          <input type="radio" name="effect" id="upload-effect-phobos" value="phobos">
-          <label class="upload-effect-label upload-effect-label-phobos" for="upload-effect-phobos">
-            <div class="upload-effect-preview"></div>
-            Фобос
-          </label>
-
-          <input type="radio" name="effect" id="upload-effect-heat" value="heat">
-          <label class="upload-effect-label upload-effect-label-heat" for="upload-effect-heat">
-            <div class="upload-effect-preview"></div>
-            Зной
-          </label>
-        </fieldset>
-
-        <input class="upload-form-hashtags" name="hashtags" placeholder="#хэш-тег">
-
-        <textarea class="upload-form-description" name="description" placeholder="Ваш комментарий..."></textarea>
-
-        <button class="upload-form-cancel" type="reset" id="upload-cancel"></button>
-        <button class="upload-form-submit" type="submit" id="upload-submit">Отправить</button>
-      </div>
-    </div>
-  </div>
-
   <div class="upload-message hidden">
     <div class="upload-message-container"></div>
   </div>
@@ -180,6 +104,82 @@
   </div>
 </div>
 
+<template id="upload-template" style="display: none">
+  <div class="upload-overlay hidden">
+    <div class="upload-effect">
+      <div class="upload-effect-container">
+        <fieldset class="upload-resize-controls">
+          <button type="button"
+            class="upload-resize-control upload-resize-controls-button upload-resize-controls-button-dec">–
+          </button>
+          <input type="text" class="upload-resize-control upload-resize-controls-value" value="100%" readonly
+            title="Image Scale" name="scale" />
+          <button type="button"
+            class="upload-resize-control upload-resize-controls-button upload-resize-controls-button-inc">+
+          </button>
+        </fieldset>
+
+        <div class="upload-form-preview">
+          <div></div>
+          <img src="img/upload-default-image.jpg" class="effect-image-preview">
+        </div>
+
+        <fieldset class="upload-effect-controls">
+          <div class="upload-effect-level transition-hide">
+            <div class="upload-effect-level-line">
+              <div class="upload-effect-level-pin" style="left: 0;"></div>
+              <div class="upload-effect-level-val" style="width: 0;"></div>
+            </div>
+          </div>
+
+          <input type="radio" name="effect" id="upload-effect-none" value="none" checked>
+          <label class="upload-effect-label" for="upload-effect-none">
+            <div class="upload-effect-preview"></div>
+            Оригинал
+          </label>
+
+          <input type="radio" name="effect" id="upload-effect-chrome" value="chrome">
+          <label class="upload-effect-label upload-effect-label-chrome" for="upload-effect-chrome">
+            <div class="upload-effect-preview"></div>
+            Хром
+          </label>
+
+          <input type="radio" name="effect" id="upload-effect-sepia" value="sepia">
+          <label class="upload-effect-label upload-effect-label-sepia" for="upload-effect-sepia">
+            <div class="upload-effect-preview"></div>
+            Сепия
+          </label>
+
+          <input type="radio" name="effect" id="upload-effect-marvin" value="marvin">
+          <label class="upload-effect-label upload-effect-label-marvin" for="upload-effect-marvin">
+            <div class="upload-effect-preview"></div>
+            Марвин
+          </label>
+
+          <input type="radio" name="effect" id="upload-effect-phobos" value="phobos">
+          <label class="upload-effect-label upload-effect-label-phobos" for="upload-effect-phobos">
+            <div class="upload-effect-preview"></div>
+            Фобос
+          </label>
+
+          <input type="radio" name="effect" id="upload-effect-heat" value="heat">
+          <label class="upload-effect-label upload-effect-label-heat" for="upload-effect-heat">
+            <div class="upload-effect-preview"></div>
+            Зной
+          </label>
+        </fieldset>
+
+        <input class="upload-form-hashtags" name="hashtags" placeholder="#хэш-тег">
+
+        <textarea class="upload-form-description" name="description" placeholder="Ваш комментарий..."></textarea>
+
+        <button class="upload-form-cancel" type="reset" id="upload-cancel"></button>
+        <button class="upload-form-submit" type="submit" id="upload-submit">Отправить</button>
+      </div>
+    </div>
+  </div>
+</template>
+
 <template id="picture-template" style="display: none">
   <a href="" class="picture">
     <img src="" width="182" height="182">
@@ -190,7 +190,7 @@
   </a>
 </template>
 
-<template id="comment-template">
+<template id="comment-template" style="display: none">
   <li class="gallery-overlay-comment">
     <img class="gallery-overlay-comment-avatar" src="" alt="Аватар комментатора фотографии" width="35" height="35">
     <p class="gallery-overlay-comment-text"></p>
