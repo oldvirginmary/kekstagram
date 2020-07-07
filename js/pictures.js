@@ -1,6 +1,4 @@
 var Gallery = {
-    pictures: [],
-
     getPictures: function () {
         var picturesPosts = [];
         var picturesNames = [];
@@ -60,11 +58,12 @@ var Gallery = {
             });
         }
 
-        Gallery.pictures = picturesPosts;
+        return picturesPosts;
     },
 
     renderPictures: function () {
-        var picturesToRender = Gallery.pictures.slice();
+        var pictures = Gallery.getPictures();
+        var picturesToRender = pictures.slice();
         var picturesBlock = document.querySelector(".pictures");
         var pictureTemplate = document.querySelector("#picture-template");
 
@@ -90,7 +89,7 @@ var Gallery = {
             return picture;
         }
 
-        for (var i = 0; i < Gallery.pictures.length; i++) {
+        for (var i = 0; i < pictures.length; i++) {
             picturesBlock.appendChild(pictureToElement(
                 picturesToRender.splice([Math.floor(Math.random() * picturesToRender.length)], 1)[0]));
         }
@@ -350,11 +349,13 @@ var Upload = {
             }
 
             var setOverlayEvents = function () {
+                var uploadForm = document.querySelector(".upload-form");
+                
                 overlay.addEventListener("click", function (evt) {
                     var uploadCancelBtn = document.querySelector(".upload-form-cancel");
                     var overlayContainer = document.querySelector(".upload-effect-container");
 
-                    if (!evt.path.includes(overlayContainer) && !overlay.classList.contains("hidden")) {
+                    if (uploadForm.querySelector(".upload-overlay") && !evt.path.includes(overlayContainer)) {
                         Upload.closeOverlay();
                     } else if (evt.target === uploadCancelBtn) {
                         Upload.closeOverlay();
@@ -362,7 +363,7 @@ var Upload = {
                 });
 
                 window.addEventListener("keydown", function (evt) {
-                    if (evt.code === "Escape" && !overlay.classList.contains("hidden")) {
+                    if (uploadForm.querySelector(".upload-overlay") && evt.code === "Escape") {
                         Upload.closeOverlay();
                     }
                 });
@@ -388,7 +389,6 @@ var Upload = {
 
             body.classList.add("modal-open");
             uploadForm.append(overlay);
-            overlay.classList.remove("hidden");
         }        
 
         setOverlay();
