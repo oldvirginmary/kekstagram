@@ -214,6 +214,20 @@ var Upload = {
             var setScaleControll = function () {
                 var scaleLevel = overlay.querySelector(".upload-resize-controls");
 
+                var scaleLevelShow = function () {
+                    var scaleLevel = document.querySelector(".upload-resize-controls");
+
+                    scaleLevel.classList.remove("transition-hide");
+                    scaleLevel.classList.add("transition-show");
+                }
+
+                var scaleLevelHide = function () {
+                    var scaleLevel = document.querySelector(".upload-resize-controls");
+
+                    scaleLevel.classList.remove("transition-show");
+                    scaleLevel.classList.add("transition-hide");
+                }
+
                 var onScaleLevelMouseup = function (evt) {
                     var previewImage = document.querySelector(".effect-image-preview");
                     var scaleLevel = document.querySelector(".upload-resize-controls");
@@ -242,6 +256,23 @@ var Upload = {
                 var filterControls = overlay.querySelector(".upload-effect-controls");
                 var filterLevel = overlay.querySelector(".upload-effect-level");
                 var levelLine = overlay.querySelector(".upload-effect-level-line");
+
+                var filterLevelShow = function () {
+                    var filterLevel = document.querySelector(".upload-effect-level");
+                    var noEffectChecked = document.querySelector("#upload-effect-none:checked");
+
+                    if (!noEffectChecked) {
+                        filterLevel.classList.remove("transition-hide");
+                        filterLevel.classList.add("transition-show");
+                    }
+                }
+
+                var filterLevelHide = function () {
+                    var filterLevel = document.querySelector(".upload-effect-level");
+
+                    filterLevel.classList.remove("transition-show");
+                    filterLevel.classList.add("transition-hide");
+                }
 
                 var applyDefaultFilterValue = function () {
                     var pin = overlay.querySelector(".upload-effect-level-pin");
