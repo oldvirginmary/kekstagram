@@ -1,0 +1,3 @@
+Gallery.renderPictures();
+
+Upload.setOverlayOpening();
