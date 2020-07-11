@@ -48,10 +48,6 @@ var Upload = {
             }
 
             var setFilterControll = function () {
-                var filterControls = overlay.querySelector(".upload-effect-controls");
-                var filterLevel = overlay.querySelector(".upload-effect-level");
-                var levelLine = overlay.querySelector(".upload-effect-level-line");
-
                 var filterLevelShow = function () {
                     var filterLevel = document.querySelector(".upload-effect-level");
                     var noEffectChecked = document.querySelector("#upload-effect-none:checked");
@@ -147,17 +143,43 @@ var Upload = {
                 }
 
                 var onMovePin = function (evt) {
-                    var allLine = overlay.querySelector(".upload-effect-level-line");
                     var pin = overlay.querySelector(".upload-effect-level-pin");
-                    var filterValue = overlay.querySelector(".upload-effect-level-val");
-                    var linePosX = Math.round(allLine.getBoundingClientRect().x);
-                    var lineWidth = allLine.getBoundingClientRect().width;
-                    var pinValue = (evt.clientX - linePosX) / (lineWidth / 100); // in percentages
+                    var levelLine = overlay.querySelector(".upload-effect-level-line");
 
-                    pin.style.left = pinValue.toString() + "%";
-                    filterValue.style.width = pinValue.toString() + "%";
+                    evt.preventDefault();
 
-                    applyFilter();
+                    var pinMove = function (evt) {
+                        var allLine = overlay.querySelector(".upload-effect-level-line");
+                        var filterValue = overlay.querySelector(".upload-effect-level-val");
+                        var linePosX = Math.round(allLine.getBoundingClientRect().x);
+                        var lineWidth = allLine.getBoundingClientRect().width;
+                        var pinValue = (evt.clientX - linePosX) / (lineWidth / 100); // in percentages
+
+                        evt.preventDefault();
+
+                        if (pinValue > 100) {
+                            pinValue = 100;
+                        } else if (pinValue < 0) {
+                            pinValue = 0;
+                        }
+                        
+                        pin.style.left = pinValue.toString() + "%";
+                        filterValue.style.width = pinValue.toString() + "%";
+
+                        applyFilter();
+                    }
+
+                    var onMouseUp = function () {
+                        overlay.removeEventListener("mousemove", pinMove);
+                        overlay.removeEventListener("mouseup", onMouseUp);
+                    }
+
+                    if (evt.target === pin) {
+                        overlay.addEventListener("mousemove", pinMove);
+                        overlay.addEventListener("mouseup", onMouseUp);
+                    } else if (evt.path.includes(levelLine)) {
+                        pinMove(evt);
+                    }
                 }
 
                 var onChangeFilter = function (evt) {
@@ -167,8 +189,11 @@ var Upload = {
 
                 applyDefaultFilterValue();
 
+                var filterControls = overlay.querySelector(".upload-effect-controls");
+                var filterLevel = overlay.querySelector(".upload-effect-level");
+
                 filterControls.addEventListener("change", onChangeFilter);
-                levelLine.addEventListener("click", onMovePin);
+                filterLevel.addEventListener("mousedown", onMovePin);
 
                 filterLevel.addEventListener("mouseenter", filterLevelShow);
                 filterLevel.addEventListener("mouseleave", filterLevelHide);
