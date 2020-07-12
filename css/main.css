@@ -548,7 +548,15 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
   background: #3c3614;
 }
 
-.upload-message a {
+.upload-message-icon {
+  margin-bottom: 10px;
+}
+
+.upload-message-text {
+  margin-bottom: 10px;
+}
+
+.upload-message-support {
   color: #ffe753;
 }
 
@@ -563,10 +571,14 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
 }
 
 .upload-message-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 40%;
 
   line-height: 1.2;
 }
