@@ -1,3 +1,3 @@
 Gallery.renderPictures();
 
-Upload.setOverlayOpening();
+UploadOverlay.init();

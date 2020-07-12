@@ -1,31 +1,30 @@
-var Upload = {
-    openOverlay: function () {
-        var overlay = document.querySelector("#upload-template")
+window.uploadOverlay = {};
+
+var UploadOverlay = {
+    open: function () {
+        var template = document.querySelector("#upload-template")
             .content
             .cloneNode(true)
             .querySelector(".upload-overlay");
 
         var setOverlay = function () {
+            var overlay = document.querySelector(".upload-overlay");
+
             var setScaleControll = function () {
                 var scaleLevel = overlay.querySelector(".upload-resize-controls");
 
                 var scaleLevelShow = function () {
-                    var scaleLevel = document.querySelector(".upload-resize-controls");
-
                     scaleLevel.classList.remove("transition-hide");
                     scaleLevel.classList.add("transition-show");
                 }
 
                 var scaleLevelHide = function () {
-                    var scaleLevel = document.querySelector(".upload-resize-controls");
-
                     scaleLevel.classList.remove("transition-show");
                     scaleLevel.classList.add("transition-hide");
                 }
 
                 var onScaleLevelMouseup = function (evt) {
                     var previewImage = document.querySelector(".effect-image-preview");
-                    var scaleLevel = document.querySelector(".upload-resize-controls");
                     var scaleLevelValue = scaleLevel.querySelector(".upload-resize-controls-value");
                     var scaleLevelUp = scaleLevel.querySelector(".upload-resize-controls-button-inc");
                     var scaleLevelDown = scaleLevel.querySelector(".upload-resize-controls-button-dec");
@@ -49,8 +48,8 @@ var Upload = {
 
             var setFilterControll = function () {
                 var filterLevelShow = function () {
-                    var filterLevel = document.querySelector(".upload-effect-level");
-                    var noEffectChecked = document.querySelector("#upload-effect-none:checked");
+                    var filterLevel = overlay.querySelector(".upload-effect-level");
+                    var noEffectChecked = overlay.querySelector("#upload-effect-none:checked");
 
                     if (!noEffectChecked) {
                         filterLevel.classList.remove("transition-hide");
@@ -59,7 +58,7 @@ var Upload = {
                 }
 
                 var filterLevelHide = function () {
-                    var filterLevel = document.querySelector(".upload-effect-level");
+                    var filterLevel = overlay.querySelector(".upload-effect-level");
 
                     filterLevel.classList.remove("transition-show");
                     filterLevel.classList.add("transition-hide");
@@ -162,7 +161,7 @@ var Upload = {
                         } else if (pinValue < 0) {
                             pinValue = 0;
                         }
-                        
+
                         pin.style.left = pinValue.toString() + "%";
                         filterValue.style.width = pinValue.toString() + "%";
 
@@ -199,66 +198,78 @@ var Upload = {
                 filterLevel.addEventListener("mouseleave", filterLevelHide);
             }
 
-            var setOverlayEvents = function () {
+            var setEvents = function () {
                 var uploadForm = document.querySelector(".upload-form");
+                var uploadCancelBtn = document.querySelector(".upload-form-cancel");
 
-                overlay.addEventListener("click", function (evt) {
-                    var uploadCancelBtn = document.querySelector(".upload-form-cancel");
-                    var overlayContainer = document.querySelector(".upload-effect-container");
-
-                    if (uploadForm.querySelector(".upload-overlay") && !evt.path.includes(overlayContainer)) {
-                        Upload.closeOverlay();
-                    } else if (evt.target === uploadCancelBtn) {
-                        Upload.closeOverlay();
+                window.uploadOverlay.onCloseOverlay = function (evt) {
+                    if (evt.code === "Escape" || evt.target === uploadCancelBtn) {
+                        UploadOverlay.close();
                     }
-                });
+                }
 
-                window.addEventListener("keydown", function (evt) {
-                    if (uploadForm.querySelector(".upload-overlay") && evt.code === "Escape") {
-                        Upload.closeOverlay();
-                    }
-                });
+                window.uploadOverlay.onFormSubmit = function (evt) {
+                    evt.preventDefault();
+
+                    window.load.upload(
+                        "https://javascript.pages.academy/kekstagram",
+                        window.uploadStatus.renderSuccessStatus,
+                        window.uploadStatus.renderFailStatus,
+                        uploadForm);
+                }
+
+                uploadForm.addEventListener("submit", window.uploadOverlay.onFormSubmit);
+
+                uploadCancelBtn.addEventListener("click", window.uploadOverlay.onCloseOverlay);
+                window.addEventListener("keydown", window.uploadOverlay.onCloseOverlay);
             }
 
             setScaleControll();
             setFilterControll();
-            setOverlayEvents();
+            setEvents();
+
+            overlay.classList.remove("hidden");
         }
 
         var renderOverlay = function () {
             var body = document.querySelector("body");
             var uploadForm = document.querySelector(".upload-form");
-            var pictureField = uploadForm.querySelector("#upload-file");
-            var reader = new FileReader();
+            var pictureField = document.querySelector("#upload-file");
 
+            var reader = new FileReader();
             reader.addEventListener("load", function (evt) {
-                var previewImage = uploadForm.querySelector(".effect-image-preview");
+                var previewImage = template.querySelector(".effect-image-preview");
                 previewImage.setAttribute("src", evt.currentTarget.result);
             });
 
             reader.readAsDataURL(pictureField.files[0]);
 
+            uploadForm.append(template);
+
             body.classList.add("modal-open");
-            uploadForm.append(overlay);
         }
 
-        setOverlay();
         renderOverlay();
+        setOverlay();
     },
 
-    closeOverlay: function () {
+    close: function () {
         var body = document.querySelector("body");
+        var overlay = document.querySelector(".upload-overlay");
         var uploadForm = document.querySelector(".upload-form");
-        var overlay = uploadForm.querySelector(".upload-overlay");
+
+        uploadForm.removeEventListener("submit", window.uploadOverlay.onFormSubmit);
+        window.removeEventListener("keydown", window.uploadOverlay.onCloseOverlay);
 
         overlay.remove();
+
         body.classList.remove("modal-open");
 
         uploadForm.reset();
     },
 
-    setOverlayOpening: function () {
+    init: function () {
         var pictureField = document.querySelector("#upload-file");
-        pictureField.addEventListener("change", Upload.openOverlay);
+        pictureField.addEventListener("change", UploadOverlay.open);
     },
 }

@@ -37,7 +37,7 @@ var Gallery = {
             console.log("Ошибка:", xhr);
         }
 
-        window.download("https://javascript.pages.academy/kekstagram/data", onGetPictures, onFailGetPictures);
+        window.load.download("https://javascript.pages.academy/kekstagram/data", onGetPictures, onFailGetPictures);
     },
 
     renderGalleryOverlay: function (pictureData) {
