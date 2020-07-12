@@ -563,10 +563,16 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
 }
 
 .upload-message-container {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40%;
 
   line-height: 1.2;
-  vertical-align: middle;
+}
+
+.upload-message-img {
+  align-self: center;
 }
 
 .container {
@@ -877,6 +883,10 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
 
 .gallery-overlay-comment-avatar {
   margin-right: 15px;
+}
+
+.gallery-overlay-comment-author {
+  font-weight: bold;
 }
 
 .gallery-overlay-loadmore {

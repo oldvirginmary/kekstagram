@@ -35,7 +35,13 @@
     </label>
   </div>
   <div class="upload-message hidden">
-    <div class="upload-message-container"></div>
+    <div class="upload-message-container">
+      <div class="upload-message-container">
+        <img src="img/icon-warning.png">
+        <b>Ошибка загрузки файла</b>
+        <a href="">Техподдержка</a>
+      </div>
+    </div>
   </div>
 </form>
 
@@ -193,10 +199,14 @@
 <template id="comment-template" style="display: none">
   <li class="gallery-overlay-comment">
     <img class="gallery-overlay-comment-avatar" src="" alt="Аватар комментатора фотографии" width="35" height="35">
-    <p class="gallery-overlay-comment-text"></p>
+    <div class="gallery-overlay-comment-wrapper">
+      <p class="gallery-overlay-comment-author"></p>
+      <p class="gallery-overlay-comment-text"></p>
+    </div>
   </li>
 </template>
 
+<script src="js/load.js"></script>
 <script src="js/gallery.js"></script>
 <script src="js/upload.js"></script>
 <script src="js/start.js"></script>

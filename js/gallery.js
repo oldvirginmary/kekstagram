@@ -1,98 +1,43 @@
 var Gallery = {
-    getMockPictures: function () {
-        var picturesPosts = [];
-        var picturesNames = [];
-        for (var i = 1; i <= 25; i++) picturesNames.push(i);
+    renderPictures: function () {
+        var onGetPictures = function (pictures) {
+            var picturesToRender = pictures.slice();
+            var picturesBlock = document.querySelector(".pictures");
+            var pictureTemplate = document.querySelector("#picture-template");
 
-        var getUrl = function () {
-            var picsDirectory = "photos/";
-            return picsDirectory + picturesNames.shift().toString() + ".jpg";
-        }
+            var pictureToElement = function (pictureData) {
+                var picture = pictureTemplate
+                    .content
+                    .cloneNode(true)
+                    .querySelector(".picture");
 
-        var getLikes = function () {
-            return Math.floor(Math.random() * 185 + 15); // from 15 to 200
-        }
+                var pictureLikes = picture.querySelector(".picture-likes");
+                var pictureComments = picture.querySelector(".picture-comments");
+                var pictureImg = picture.querySelector("img");
 
-        var getComments = function () {
-            var variants = [
-                "Всё отлично!",
-                "В целом всё неплохо. Но не всё.",
-                "Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.",
-                "Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.",
-                "Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.",
-                "Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!",
-            ];
+                picture.setAttribute("href", "#");
+                pictureImg.setAttribute("src", pictureData.url);
+                pictureLikes.textContent = pictureData.likes;
+                pictureComments.textContent = pictureData.comments.length;
 
-            var numOfComments = Math.floor(Math.random() * 7); // from 0 to 6
+                picture.addEventListener("click", function () {
+                    Gallery.renderGalleryOverlay(pictureData);
+                });
 
-            var comments = [];
-
-            for (var i = 0; i < numOfComments; i++) {
-                var variant = variants
-                    .splice(Math.floor(Math.random() * variants.length), 1)[0];
-                comments.push(variant);
+                return picture;
             }
 
-            return comments;
+            for (var i = 0; i < pictures.length; i++) {
+                picturesBlock.appendChild(pictureToElement(
+                    picturesToRender.splice([Math.floor(Math.random() * picturesToRender.length)], 1)[0]));
+            }
         }
 
-        var getDescription = function () {
-            var descriptions = [
-                "Тестим новую камеру!",
-                "Затусили с друзьями на море",
-                "Как же круто тут кормят",
-                "Отдыхаем...",
-                "Цените каждое мгновенье. Цените тех, кто рядом с вами и отгоняйте все сомненья.Не обижайте всех словами......",
-                "Вот это тачка!",
-            ];
-
-            return descriptions[Math.floor(Math.random() * descriptions.length)];
+        var onFailGetPictures = function (xhr) {
+            console.log("Ошибка:", xhr);
         }
 
-        while (picturesNames.length > 0) {
-            picturesPosts.push({
-                url: getUrl(),
-                likes: getLikes(),
-                comments: getComments(),
-                description: getDescription(),
-            });
-        }
-
-        return picturesPosts;
-    },
-
-    renderPictures: function () {
-        var pictures = Gallery.getMockPictures();
-        var picturesToRender = pictures.slice();
-        var picturesBlock = document.querySelector(".pictures");
-        var pictureTemplate = document.querySelector("#picture-template");
-
-        var pictureToElement = function (pictureData) {
-            var picture = pictureTemplate
-                .content
-                .cloneNode(true)
-                .querySelector(".picture");
-
-            var pictureLikes = picture.querySelector(".picture-likes");
-            var pictureComments = picture.querySelector(".picture-comments");
-            var pictureImg = picture.querySelector("img");
-
-            picture.setAttribute("href", "#");
-            pictureImg.setAttribute("src", pictureData.url);
-            pictureLikes.textContent = pictureData.likes;
-            pictureComments.textContent = pictureData.comments.length;
-
-            picture.addEventListener("click", function () {
-                Gallery.renderGalleryOverlay(pictureData);
-            });
-
-            return picture;
-        }
-
-        for (var i = 0; i < pictures.length; i++) {
-            picturesBlock.appendChild(pictureToElement(
-                picturesToRender.splice([Math.floor(Math.random() * picturesToRender.length)], 1)[0]));
-        }
+        window.download("https://javascript.pages.academy/kekstagram/data", onGetPictures, onFailGetPictures);
     },
 
     renderGalleryOverlay: function (pictureData) {
@@ -116,16 +61,14 @@ var Gallery = {
                             .content
                             .cloneNode(true)
                             .querySelector(".gallery-overlay-comment");
+                            
+                        var commentAuthor = comment.querySelector(".gallery-overlay-comment-author");
                         var commentText = comment.querySelector(".gallery-overlay-comment-text");
                         var commentAvatar = comment.querySelector(".gallery-overlay-comment-avatar");
 
-                        commentText.textContent = comments[i];
-                        commentAvatar.setAttribute(
-                            "src",
-                            "img/" + "avatar-"
-                            + Math.ceil(Math.random() * 6).toString()
-                            + ".svg"
-                        );
+                        commentAuthor.textContent = comments[i]["name"];
+                        commentText.textContent = comments[i]["message"];
+                        commentAvatar.setAttribute("src", comments[i]["avatar"]);
 
                         commentsList.appendChild(comment);
                     }
