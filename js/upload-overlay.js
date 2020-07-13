@@ -200,12 +200,72 @@ var UploadOverlay = {
 
             var setEvents = function () {
                 var uploadForm = document.querySelector(".upload-form");
+                var uploadSubmitBtn = document.querySelector(".upload-form-submit");
                 var uploadCancelBtn = document.querySelector(".upload-form-cancel");
 
                 window.uploadOverlay.onCloseOverlay = function (evt) {
-                    if (evt.code === "Escape" || evt.target === uploadCancelBtn) {
-                        UploadOverlay.close();
+                    if (!uploadForm.querySelector(".upload-form-hashtags:focus")
+                        && !uploadForm.querySelector(".upload-form-description:focus")) {
+
+                        if (evt.code === "Escape" || evt.target === uploadCancelBtn) {
+                            if (evt.target === uploadCancelBtn) UploadOverlay.close();
+                        }
                     }
+                }
+
+                var onSubmitBtnClick = function () {
+                    var hashField = uploadForm.querySelector(".upload-form-hashtags");
+                    var commentField = uploadForm.querySelector(".upload-form-description");
+
+                    var checkHashesField = function () {
+                        var hashes = hashField.value.toLowerCase().split(" ");
+                        hashField.setCustomValidity("");
+
+                        hashes = hashes.filter(function (hash) {
+                            return hash !== "";
+                        });
+
+                        for (var i = 0; i < hashes.length; i++) {
+
+                            if (hashes[i][0] !== "#" || hashes[i].lastIndexOf("#") !== 0) {
+                                hashField.setCustomValidity("Хэш-теги начинаются с #");
+
+                            } else if (hashes[i].length > 20 || hashes[i].length < 2) {
+                                hashField.setCustomValidity("Размер хэш-тега может быть от 2 до 20");
+
+                            } else if (hashes.length > 5) {
+                                hashField.setCustomValidity("Хэш-тегов не может быть больше 5");
+
+                            } else {
+
+                                for (var h = 0; h < hashes.length; h++) {
+                                    var otherHashes = hashes.slice();
+                                    currentHash = otherHashes.pop(otherHashes.indexOf(h));
+
+                                    if (otherHashes.indexOf(currentHash) !== -1) {
+                                        hashField.setCustomValidity("Хэш-теги повторяются! (регистр не имеет значения)");
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    var checkCommentField = function () {
+                        if (commentField.value.length > 140) {
+                            commentField.setCustomValidity("Максимальная длинна комментария: 140 символов");
+                        } else {
+                            commentField.setCustomValidity("");
+                        }
+                    }
+
+                    checkHashesField();
+                    checkCommentField();
+
+                    hashField.removeEventListener("input", checkHashesField);
+                    hashField.addEventListener("input", checkHashesField);
+
+                    commentField.removeEventListener("input", checkCommentField);
+                    commentField.addEventListener("input", checkCommentField);
                 }
 
                 window.uploadOverlay.onFormSubmit = function (evt) {
@@ -218,6 +278,7 @@ var UploadOverlay = {
                         uploadForm);
                 }
 
+                uploadSubmitBtn.addEventListener("click", onSubmitBtnClick);
                 uploadForm.addEventListener("submit", window.uploadOverlay.onFormSubmit);
 
                 uploadCancelBtn.addEventListener("click", window.uploadOverlay.onCloseOverlay);
