@@ -51,6 +51,10 @@ body.modal-open {
   display: none;
 }
 
+.transparent {
+  opacity: 0;
+}
+
 .transition-show {
   opacity: 1;
   transition: all 0.3s;
@@ -64,17 +68,19 @@ body.modal-open {
 /* Фильтры */
 
 .filters {
-  padding: 15px 0;
+  padding: 20px 0;
 
   text-align: center;
 }
 
 .filters-item {
-  padding: 0 16px;
+  padding: 4px 14px;
 
+  color: #ffffff;
+  font-family: "Open Sans Condensed", "Arial", sans-serif;
   font-size: 18px;
-  line-height: 30px;
-  text-decoration: underline;
+  font-weight: 700;
+  text-transform: uppercase;
 
   cursor: pointer;
 }
@@ -86,11 +92,11 @@ body.modal-open {
 }
 
 .filters-radio:checked + .filters-item {
-  color: #000000;
-  text-decoration: none;
-
-  background: #ffffff;
+  color: #ff4e4e;
+  background-color: #ffffff;
   border-radius: 2px;
+  border: 1px solid #ffffff;
+  box-shadow: inset 1px 1px #ff4e4e, inset -1px -1px #ff4e4e;
 }
 
 /* Форма */

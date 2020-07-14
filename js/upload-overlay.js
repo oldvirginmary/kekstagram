@@ -1,4 +1,4 @@
-window.uploadOverlay = {};
+window.uploadOverlay = new Object();
 
 var UploadOverlay = {
     open: function () {

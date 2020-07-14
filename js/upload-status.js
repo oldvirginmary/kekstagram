@@ -1,5 +1,5 @@
 (function () {
-    window.uploadStatus = {};
+    window.uploadStatus = new Object();
 
     window.uploadStatus.renderSuccessStatus = function () {
         var uploadForm = document.querySelector(".upload-form");
@@ -8,7 +8,7 @@
             .querySelector(".upload-message");
         var messageText = message.querySelector(".upload-message-text");
 
-        messageText.textContent = "Сохранено";
+        messageText.innerText = "Сохранено";
 
         uploadForm.append(message);
 
@@ -26,7 +26,7 @@
 
         messageIcon.classList.remove("hidden");
         messageSupport.classList.remove("hidden");
-        messageText.textContent = "Ошибка загрузки";
+        messageText.innerText = "Ошибка загрузки";
 
         console.log("Ошибка загрузки: ", xhr);
 

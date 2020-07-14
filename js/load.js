@@ -1,5 +1,5 @@
 (function () {
-    window.load = {};
+    window.load = new Object();
 
     window.load.download = function (url, onSuccess, onFail) {
         var xhr = new XMLHttpRequest();

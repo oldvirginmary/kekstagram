@@ -1,11 +1,12 @@
+window.gallery = new Object();
+
 var Gallery = {
     renderPictures: function () {
-        var onGetPictures = function (pictures) {
-            var picturesToRender = pictures.slice();
+        var renderGallery = function (filterParam) {
             var picturesBlock = document.querySelector(".pictures");
-            var pictureTemplate = document.querySelector("#picture-template");
 
             var pictureToElement = function (pictureData) {
+                var pictureTemplate = document.querySelector("#picture-template");
                 var picture = pictureTemplate
                     .content
                     .cloneNode(true)
@@ -17,8 +18,8 @@ var Gallery = {
 
                 picture.setAttribute("href", "#");
                 pictureImg.setAttribute("src", pictureData.url);
-                pictureLikes.textContent = pictureData.likes;
-                pictureComments.textContent = pictureData.comments.length;
+                pictureLikes.innerText = pictureData.likes;
+                pictureComments.innerText = pictureData.comments.length;
 
                 picture.addEventListener("click", function () {
                     Gallery.renderGalleryOverlay(pictureData);
@@ -27,15 +28,75 @@ var Gallery = {
                 return picture;
             }
 
-            for (var i = 0; i < pictures.length; i++) {
-                picturesBlock.appendChild(pictureToElement(
-                    picturesToRender.splice([Math.floor(Math.random() * picturesToRender.length)], 1)[0]));
+            var filter = {
+                recommend: function () {
+                    window.gallery.pictures.slice()
+                        .forEach(function (picture) {
+                            picturesBlock.appendChild(pictureToElement(picture));
+                        });
+                },
+
+                popular: function () {
+                    var pictures = window.gallery.pictures.slice();
+
+                    pictures
+                        .sort(function (left, right) {
+                            return (right.comments.length * 2 + right.likes) - (left.comments.length * 2 + left.likes);
+                        })
+                        .forEach(function (picture) {
+                            picturesBlock.appendChild(pictureToElement(picture));
+                        });
+                },
+
+                discussed: function () {
+                    var pictures = window.gallery.pictures.slice();
+
+                    pictures
+                        .sort(function (left, right) {
+                            return right.comments.length - left.comments.length;
+                        })
+                        .forEach(function (picture) {
+                            picturesBlock.appendChild(pictureToElement(picture));
+                        });
+                },
+
+                random: function () {
+                    var pictures = window.gallery.pictures.slice();
+
+                    while (pictures.length) {
+                        var randomPicture = pictures
+                            .splice([Math.floor(Math.random() * pictures.length)], 1)[0];
+
+                        picturesBlock.appendChild(pictureToElement(randomPicture));
+                    }
+                },
             }
+
+            while (picturesBlock.firstChild) {
+                picturesBlock.removeChild(picturesBlock.firstChild);
+            }
+
+            filter[filterParam]();
+        }
+
+        var onGetPictures = function (pictures) {
+            window.gallery.pictures = pictures;
+
+            renderGallery("recommend");
+
+            var filters = document.querySelector(".filters");
+            filters.classList.add("transition-show");
         }
 
         var onFailGetPictures = function (xhr) {
             console.log("Ошибка:", xhr);
         }
+
+        var filters = document.querySelector(".filters");
+        
+        filters.addEventListener("change", function (evt) {
+            renderGallery(evt.target.value);
+        });
 
         window.load.download("https://javascript.pages.academy/kekstagram/data", onGetPictures, onFailGetPictures);
     },
@@ -52,8 +113,8 @@ var Gallery = {
                 var commentsCount = document.querySelector(".comments-count");
                 var commentTemplate = document.querySelector("#comment-template");
 
-                currentCommentsCount.textContent = 0;
-                commentsCount.textContent = pictureData.comments.length;
+                currentCommentsCount.innerText = 0;
+                commentsCount.innerText = pictureData.comments.length;
 
                 var render = function (comments) {
                     for (var i = 0; i < comments.length; i++) {
@@ -66,15 +127,15 @@ var Gallery = {
                         var commentText = comment.querySelector(".gallery-overlay-comment-text");
                         var commentAvatar = comment.querySelector(".gallery-overlay-comment-avatar");
 
-                        commentAuthor.textContent = comments[i]["name"];
-                        commentText.textContent = comments[i]["message"];
+                        commentAuthor.innerText = comments[i]["name"];
+                        commentText.innerText = comments[i]["message"];
                         commentAvatar.setAttribute("src", comments[i]["avatar"]);
 
                         commentsList.appendChild(comment);
                     }
 
-                    currentCommentsCount.textContent =
-                        Number(currentCommentsCount.textContent) + comments.length;
+                    currentCommentsCount.innerText =
+                        Number(currentCommentsCount.innerText) + comments.length;
                 }
 
                 var renderNext = function (toLoad) {
@@ -87,7 +148,7 @@ var Gallery = {
                         var btn = document.createElement("button");
                         btn.classList.add("gallery-overlay-loadmore");
                         btn.setAttribute("type", "button");
-                        btn.textContent = "Загрузить ещё";
+                        btn.innerText = "Загрузить ещё";
 
                         commentsList.after(btn);
 
@@ -107,8 +168,8 @@ var Gallery = {
             var likes = overlay.querySelector(".likes-count");
 
             picture.setAttribute("src", pictureData.url);
-            description.textContent = pictureData.description;
-            likes.textContent = pictureData.likes;
+            description.innerText = pictureData.description;
+            likes.innerText = pictureData.likes;
 
             renderComments(pictureData.comments.slice());
 
