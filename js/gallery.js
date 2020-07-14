@@ -89,7 +89,7 @@ var Gallery = {
         }
 
         var onFailGetPictures = function (xhr) {
-            console.log("Ошибка:", xhr);
+            console.log("Ошибка загрузки галереи:", xhr);
         }
 
         var filters = document.querySelector(".filters");
