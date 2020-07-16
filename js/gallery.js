@@ -1,3 +1,5 @@
+"use strict";
+
 window.gallery = new Object();
 
 var Gallery = {

@@ -1,3 +1,5 @@
+"use strict";
+
 window.uploadOverlay = new Object();
 
 var UploadOverlay = {

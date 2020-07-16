@@ -1,4 +1,6 @@
 (function () {
+    "use strict";
+    
     window.load = new Object();
 
     window.load.download = function (url, onSuccess, onFail) {

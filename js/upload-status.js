@@ -1,4 +1,6 @@
 (function () {
+    "use strict";
+    
     window.uploadStatus = new Object();
 
     window.uploadStatus.renderSuccessStatus = function () {
