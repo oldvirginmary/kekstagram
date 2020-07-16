@@ -1,8 +1,8 @@
 "use strict";
 
-window.gallery = new Object();
-
 var Gallery = {
+    pictures: new Object(),
+
     renderPictures: function () {
         var renderGallery = function (filterParam) {
             var picturesBlock = document.querySelector(".pictures");
@@ -32,14 +32,14 @@ var Gallery = {
 
             var filter = {
                 recommend: function () {
-                    window.gallery.pictures.slice()
+                    Gallery.pictures.slice()
                         .forEach(function (picture) {
                             picturesBlock.appendChild(pictureToElement(picture));
                         });
                 },
 
                 popular: function () {
-                    var pictures = window.gallery.pictures.slice();
+                    var pictures = Gallery.pictures.slice();
 
                     pictures
                         .sort(function (left, right) {
@@ -51,7 +51,7 @@ var Gallery = {
                 },
 
                 discussed: function () {
-                    var pictures = window.gallery.pictures.slice();
+                    var pictures = Gallery.pictures.slice();
 
                     pictures
                         .sort(function (left, right) {
@@ -63,7 +63,7 @@ var Gallery = {
                 },
 
                 random: function () {
-                    var pictures = window.gallery.pictures.slice();
+                    var pictures = Gallery.pictures.slice();
 
                     while (pictures.length) {
                         var randomPicture = pictures
@@ -82,7 +82,7 @@ var Gallery = {
         }
 
         var onGetPictures = function (pictures) {
-            window.gallery.pictures = pictures;
+            Gallery.pictures = pictures;
 
             renderGallery("recommend");
 

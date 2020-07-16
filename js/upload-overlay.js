@@ -242,7 +242,7 @@ var UploadOverlay = {
 
                                 for (var h = 0; h < hashes.length; h++) {
                                     var otherHashes = hashes.slice();
-                                    currentHash = otherHashes.pop(otherHashes.indexOf(h));
+                                    var currentHash = otherHashes.pop(otherHashes.indexOf(h));
 
                                     if (otherHashes.indexOf(currentHash) !== -1) {
                                         hashField.setCustomValidity("Хэш-теги повторяются! (регистр не имеет значения)");

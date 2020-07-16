@@ -1,5 +1,7 @@
-"use strict";
+(function () {
+    "use strict";
 
-Gallery.renderPictures();
+    Gallery.renderPictures();
 
-UploadOverlay.init();
+    UploadOverlay.init();
+})();
